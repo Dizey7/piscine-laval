@@ -25,7 +25,9 @@ export default function StatisticsPage() {
     });
   }, []);
 
-  const loadStats = async (fileId: string) => {
+  const handleFileChange = async (fileId: string) => {
+    setSelectedFile(fileId);
+    if (!fileId) { setStats(null); return; }
     setLoading(true);
     const res = await fetch('/api/analyze', {
       method: 'POST',
@@ -36,10 +38,6 @@ export default function StatisticsPage() {
     setStats(data);
     setLoading(false);
   };
-
-  useEffect(() => {
-    if (selectedFile) loadStats(selectedFile);
-  }, [selectedFile]);
 
   const maxFormation = stats ? Math.max(...Object.values(stats.formations), 1) : 1;
   const maxNiveau = stats ? Math.max(...Object.values(stats.niveaux), 1) : 1;
@@ -55,7 +53,7 @@ export default function StatisticsPage() {
           </h1>
           <p className="text-gray-400 mt-1">Tendances, taux d&apos;occupation, prévisions et recommandations</p>
         </div>
-        <select value={selectedFile} onChange={e => setSelectedFile(e.target.value)} className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+        <select value={selectedFile} onChange={e => handleFileChange(e.target.value)} className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
           <option value="">Sélectionner un fichier</option>
           {files.map(f => <option key={f.id} value={f.id}>{f.name} ({f.agentCount})</option>)}
         </select>

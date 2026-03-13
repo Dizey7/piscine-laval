@@ -33,7 +33,7 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
     else if (e.type === 'dragleave') setIsDragging(false);
   }, []);
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = useCallback(async (file: File) => {
     setUploading(true);
     setResult(null);
 
@@ -55,7 +55,7 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
     } finally {
       setUploading(false);
     }
-  };
+  }, [onUploadComplete]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -64,7 +64,7 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
 
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) handleUpload(files[0]);
-  }, []);
+  }, [handleUpload]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;

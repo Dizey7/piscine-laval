@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bell, AlertTriangle, AlertCircle, Info, CheckCircle, Eye } from 'lucide-react';
+import { Bell, AlertTriangle, AlertCircle, Info, CheckCircle } from 'lucide-react';
 
 interface AlertItem {
   id: string;

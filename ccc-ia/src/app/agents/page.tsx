@@ -24,7 +24,9 @@ export default function AgentsPage() {
     });
   }, []);
 
-  const loadAgents = async (fileId: string) => {
+  const handleFileChange = async (fileId: string) => {
+    setSelectedFile(fileId);
+    if (!fileId) return;
     setLoading(true);
     const res = await fetch('/api/chat', {
       method: 'POST',
@@ -35,10 +37,6 @@ export default function AgentsPage() {
     if (data.response?.data?.agents) setAgents(data.response.data.agents);
     setLoading(false);
   };
-
-  useEffect(() => {
-    if (selectedFile) loadAgents(selectedFile);
-  }, [selectedFile]);
 
   const filteredAgents = agents.filter(a => {
     if (filterNiveau && !a.niveau?.includes(filterNiveau)) return false;
@@ -101,7 +99,7 @@ export default function AgentsPage() {
             <span className="text-sm text-gray-400">Filtres :</span>
           </div>
 
-          <select value={selectedFile} onChange={e => setSelectedFile(e.target.value)} className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
+          <select value={selectedFile} onChange={e => handleFileChange(e.target.value)} className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white">
             <option value="">Sélectionner un fichier</option>
             {files.map(f => <option key={f.id} value={f.id}>{f.name} ({f.agentCount})</option>)}
           </select>
